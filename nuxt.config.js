@@ -23,7 +23,10 @@ export default {
   /*
   ** Global CSS
   */
-  css: ['element-ui/lib/theme-chalk/index.css'],
+  css: [
+    'assets/css/common.css',
+    'element-ui/lib/theme-chalk/index.css',
+  ],
   /*
   ** Plugins to load before mounting the App
   */
@@ -53,7 +56,9 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'http://doco.dev',
+      target: 'https://doco.dev',
+      // 开启跨域
+      changeOrigin: true,
     },
   },
   /*
