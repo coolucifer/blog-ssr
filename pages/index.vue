@@ -13,6 +13,7 @@
 import ArticleCard from '@/components/ArticleCard';
 
 export default {
+  layout: 'blog',
   components: {
     ArticleCard,
   },
