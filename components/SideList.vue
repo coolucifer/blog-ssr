@@ -5,6 +5,9 @@
       <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
     </el-input>
     <el-card class="side-card">
+      <div class="side-card-header">
+        <div class="avatar"></div>
+      </div>
       <el-button-group>
         <a href="https://github.com/coolucifer" target="_blank">
           <el-button size="mini" plain icon="iconfont icon-github">Github</el-button>
@@ -54,8 +57,38 @@ export default {
   .side-card {
     position: sticky;
     top: 20px;
+    .el-card__body {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    .side-card-header {
+      position: relative;
+      // 背景图片资源宽高比3/5, side-card固定宽度300px;
+      height: 180px;
+      background: url('~assets/images/card-bgimg.jpg') no-repeat top center;
+      background-size: contain;
+      margin-bottom: 50px;
+      .avatar {
+        position: absolute;
+        left: calc(50% - 40px);
+        bottom: -40px;
+        width: 80px;
+        height: 80px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        background: url('~assets/images/avatar.jpg') no-repeat center center;
+        background-size: cover;
+        transition: all 1s;
+        &:hover {
+          cursor: pointer;
+          transform: rotate(360deg) scale(1.2);
+        }
+      }
+    }
     .el-button-group {
       display: flex;
+      margin: 20px;
       a {
         // 三等分
         flex: 1;
