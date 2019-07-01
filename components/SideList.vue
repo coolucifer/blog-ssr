@@ -7,13 +7,13 @@
     <el-card class="side-card">
       <el-button-group>
         <a href="https://github.com/coolucifer" target="_blank">
-          <el-button plain icon="iconfont icon-github">Github</el-button>
+          <el-button size="mini" plain icon="iconfont icon-github">Github</el-button>
         </a>
         <a href="http://wpa.qq.com/msgrd?v=3&uin=1045606768&site=qq&menu=yes" targe="_blank">
-          <el-button plain icon="iconfont icon-qq">QQ</el-button>
+          <el-button size="mini" plain icon="iconfont icon-qq">QQ</el-button>
         </a>
         <a href="mailto:me@doco.dev">
-          <el-button plain icon="iconfont icon-mail">Mailto</el-button>
+          <el-button size="mini" plain icon="iconfont icon-mail">Mailto</el-button>
         </a>
       </el-button-group>
     </el-card>
@@ -44,7 +44,50 @@ export default {
 </script>
 <style lang="scss">
 .side-list {
-  position: sticky;
-  top: 80px;
+  // 父元素与子元素顶部会有5px距离, 由于换行符导致的. 也可以在父元素添加font-size:0;来解决
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  .el-input {
+    margin-bottom: 10px;
+  }
+  .side-card {
+    position: sticky;
+    top: 20px;
+    .el-button-group {
+      display: flex;
+      a {
+        // 三等分
+        flex: 1;
+        display: flex;
+        text-decoration: none;
+        .el-button {
+          flex-grow: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 0;
+          font-size: 14px;
+          padding: 7px 0;
+          i {
+            margin-right: 5px;
+          }
+          &:hover {
+            z-index: 2;
+          }
+        }
+        &:first-child > .el-button {
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+          margin-right: -1px;
+        }
+        &:last-child > .el-button {
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+          margin-left: -1px;
+        }
+      }
+    }
+  }
 }
 </style>

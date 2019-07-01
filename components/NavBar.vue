@@ -56,6 +56,7 @@ export default {
 <style lang="scss">
 .nav-bar {
   flex-shrink: 0;
+  background-color: #fff;
   .el-menu {
     width: 1040px;
     max-width: 100%;
