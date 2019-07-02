@@ -15,13 +15,13 @@
       </div>
       <el-button-group>
         <a href="https://github.com/coolucifer" target="_blank">
-          <el-button size="mini" plain icon="iconfont icon-github">Github</el-button>
+          <el-button size="mini" plain icon="iconfont icon-github" @click="clearFocus">Github</el-button>
         </a>
         <a href="http://wpa.qq.com/msgrd?v=3&uin=1045606768&site=qq&menu=yes" target="_blank">
-          <el-button size="mini" plain icon="iconfont icon-qq">QQ</el-button>
+          <el-button size="mini" plain icon="iconfont icon-qq" @click="clearFocus">QQ</el-button>
         </a>
         <a href="mailto:me@doco.dev">
-          <el-button size="mini" plain icon="iconfont icon-mail">Mailto</el-button>
+          <el-button size="mini" plain icon="iconfont icon-mail" @click="clearFocus">Mailto</el-button>
         </a>
       </el-button-group>
     </el-card>
@@ -50,6 +50,10 @@ export default {
       const { searchValue } = this;
       console.log('search: ', searchValue);
       this.$emit('search', searchValue);
+    },
+    clearFocus() {
+      const el = document.activeElement;
+      el.blur();
     },
   },
 };
