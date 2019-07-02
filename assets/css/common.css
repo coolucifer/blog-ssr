@@ -16,3 +16,31 @@ html {
   box-sizing: border-box;
   margin: 0;
 }
+
+*:focus {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:-webkit-any-link {
+  color: inherit;
+}
+
+/* 页面过渡动画 */
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.page-leave-active,
+.page-enter-active {
+  transition: all 0.5s;
+}
+.page-enter {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
