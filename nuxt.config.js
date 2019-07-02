@@ -70,5 +70,9 @@ export default {
     */
     extend(config, ctx) {
     },
+    loaders: {
+      // 100k以下的图片会被编译为base64
+      imgUrl: { limit: 100000 },
+    },
   },
 };
