@@ -37,7 +37,22 @@ export default {
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    $route(to) {
+      switch (true) {
+        case /practice/.test(to.path):
+          this.activeIndex = 'practice';
+          break;
+        case /about/.test(to.path):
+          this.activeIndex = 'about';
+          break;
+        default:
+          this.activeIndex = 'blog';
+          break;
+      }
+      console.log('route change: ', to.path, this.activeIndex);
+    },
+  },
   created() {
     if (/practice/.test(this.$route.path)) {
       this.activeIndex = 'practice';
@@ -49,6 +64,8 @@ export default {
   mounted() {},
   methods: {
     handleNavSelect(key) {
+      this.activeIndex = key;
+      console.log('select: ', key, this.activeIndex);
       if (key === 'blog') {
         this.$router.push('/');
         return;
