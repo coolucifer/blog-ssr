@@ -1,19 +1,25 @@
 <!-- nav bar -->
 <template>
   <div class="nav-bar">
-    <el-menu
-      mode="horizontal"
-      :default-active="activeIndex"
-      @select="handleNavSelect"
-    >
-      <el-menu-item
-        v-for="item in navList"
-        :key="item.index"
-        :index="item.index"
+    <div class="nav-bar-container">
+      <nuxt-link to="/" class="logo">
+        <!-- <img class="logo" src="/logo.png" alt="logo"> -->
+        Doco
+      </nuxt-link>
+      <el-menu
+        mode="horizontal"
+        :default-active="activeIndex"
+        @select="handleNavSelect"
       >
-        {{ item.name }}
-      </el-menu-item>
-    </el-menu>
+        <el-menu-item
+          v-for="item in navList"
+          :key="item.index"
+          :index="item.index"
+        >
+          {{ item.name }}
+        </el-menu-item>
+      </el-menu>
+    </div>
   </div>
 </template>
 
@@ -55,27 +61,47 @@ export default {
 </script>
 <style lang="scss">
 .nav-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-shrink: 0;
   background-color: #fff;
-  .el-menu {
-    width: 1040px;
-    max-width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0 20px;
-    margin: auto;
-    border-bottom: none;
-    .el-menu-item {
-      color: #666;
-      &.is-active {
-        color: #000;
-      }
-    }
-  }
   z-index: 2;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
   position: relative;
   transition: height 0.3s ease;
+  user-select: none;
+  .nav-bar-container {
+    display: flex;
+    justify-content: space-between;
+    width: 1040px;
+    max-width: 100%;
+  }
+  .logo {
+    cursor: pointer;
+    // object-fit: contain;
+    font-size: 40px;
+    font-weight: bold;
+    height: 56px;
+    padding-left: 20px;
+  }
+  .el-menu {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: none;
+    // background: url('/logo.png') no-repeat left center;
+    // background-size: contain;
+    .el-menu-item {
+      // color: #666;
+      width: 90px;
+      text-align: center;
+      &.is-active,
+      &:hover {
+        color: #000;
+      }
+    }
+  }
 }
 </style>

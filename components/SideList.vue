@@ -70,6 +70,8 @@ export default {
       background-size: contain;
       margin-bottom: 50px;
       .avatar {
+        // 优化性能
+        z-index: 1;
         position: absolute;
         left: calc(50% - 40px);
         bottom: -40px;
@@ -79,7 +81,7 @@ export default {
         border-radius: 50%;
         background: url('~assets/images/avatar.jpg') no-repeat center center;
         background-size: cover;
-        transition: all 1s;
+        transition: all .5s;
         &:hover {
           cursor: pointer;
           transform: rotate(360deg) scale(1.2);
@@ -105,7 +107,8 @@ export default {
           i {
             margin-right: 5px;
           }
-          &:hover {
+          &:hover,
+          &:focus {
             z-index: 2;
           }
         }

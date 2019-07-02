@@ -5,14 +5,14 @@
     class="article-card"
     @click.native="handleCardClick"
   >
-    <div class="header">
-      <div class="title">
-        {{ item.title }}
-      </div>
-      <div class="create-date">
-        {{ item.createTime | getDate }}
-      </div>
+    <!-- <div class="header"> -->
+    <div class="title">
+      {{ item.title }}
     </div>
+    <div class="create-date">
+      {{ item.createTime | getDate }}
+    </div>
+    <!-- </div> -->
   </el-card>
 </template>
 
@@ -50,34 +50,35 @@ export default {
 </script>
 <style lang="scss">
 .article-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  user-select: none;
   height: 150px;
   margin-top: 10px;
   padding: 20px;
   border-radius: 4px;
   background-color: #ffffff;
-  // box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  // h-shadow v-shadow blur spread color inset;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.1);
   cursor: pointer;
+  // color: #409EFF;
+  .el-card__body {
+    display: flex;
+    // flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .title {
-    color: #409EFF;
     font-size: 20px;
-    &:hover {
-      color: #66b1ff;
-    }
   }
   .create-date {
     padding-right: 20px;
-    color: #409EFF;
-    &:hover {
-      color: #66b1ff;
-    }
+  }
+  &:hover {
+    color: #66b1ff;
   }
 }
 </style>
