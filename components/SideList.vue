@@ -1,9 +1,14 @@
 <!-- side list -->
 <template>
   <div class="side-list">
-    <el-input v-model="searchValue" size="small" @keyup.enter.native="search">
-      <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-    </el-input>
+    <el-collapse-transition>
+      <!-- 确保动画有效 -->
+      <div v-show="showSearchBar">
+        <el-input v-model="searchValue" size="small" @keyup.enter.native="search">
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+        </el-input>
+      </div>
+    </el-collapse-transition>
     <el-card class="side-card">
       <div class="side-card-header">
         <div class="avatar"></div>
@@ -12,7 +17,7 @@
         <a href="https://github.com/coolucifer" target="_blank">
           <el-button size="mini" plain icon="iconfont icon-github">Github</el-button>
         </a>
-        <a href="http://wpa.qq.com/msgrd?v=3&uin=1045606768&site=qq&menu=yes" targe="_blank">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=1045606768&site=qq&menu=yes" target="_blank">
           <el-button size="mini" plain icon="iconfont icon-qq">QQ</el-button>
         </a>
         <a href="mailto:me@doco.dev">
@@ -31,7 +36,12 @@ export default {
       searchValue: '',
     };
   },
-  computed: {},
+  computed: {
+    showSearchBar() {
+      const { path } = this.$route;
+      return /^\/$/.test(path);
+    },
+  },
   watch: {},
   created() {},
   mounted() {},
