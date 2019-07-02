@@ -4,6 +4,7 @@
       v-for="item in list"
       :key="item.id"
       :item="item"
+      @click.native="cardClick(item.id)"
     >
     </article-card>
   </div>
@@ -22,6 +23,11 @@ export default {
     return {
       list,
     };
+  },
+  methods: {
+    cardClick(id) {
+      this.$router.push(`/blog/${id}`);
+    },
   },
 };
 </script>
