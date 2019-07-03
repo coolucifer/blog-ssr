@@ -44,3 +44,7 @@ a:-webkit-any-link {
   opacity: 0;
   transform: translateX(20px);
 }
+
+.nuxt-progress {
+  z-index: 10;
+}
