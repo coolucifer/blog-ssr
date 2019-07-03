@@ -145,7 +145,7 @@ export default {
           max-width: 100%;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: auto  300px;
+          grid-template-columns: calc(100% - 320px)  300px;
           grid-column-gap: 20px;
           grid-template-areas: 'main side';
           .side-list {
