@@ -1,13 +1,31 @@
 <template>
   <div class="article-content">
+    <!-- 'v-html' directive can lead to XSS attack  vue/no-v-html -->
+    <!-- eslint-disable-next-line -->
+    <div class="html" v-html="content"></div>
+    <el-dialog
+      :visible.sync="showImgPreview"
+      top="0"
+      width="80%"
+    >
+      <img :src="imgSrc" alt="">
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import marked from '@/utils/marked';
+
 export default {
   layout: 'blog',
   name: 'ArticleContent',
   components: {
+  },
+  data() {
+    return {
+      showImgPreview: false,
+      imgSrc: '',
+    };
   },
   computed: {
   },
@@ -19,15 +37,76 @@ export default {
     const res = await $axios.$get('/api/post', {
       params: { id },
     });
-    const { content } = res.post;
-    // console.log('content: ', content);
+    let { content } = res.post;
+    // 所有带hash的链接替换为history模式
+    content = content.replace(/\(#\//g, '(/');
+    content = marked(content);
     return {
       content,
     };
   },
   mounted() {
+    this.addListeners();
   },
   methods: {
+    // 图片/链接添加事件
+    addListeners() {
+      this.imgGroup = document.querySelectorAll('.article-content img');
+      this.imgGroup.forEach(img => {
+        img.addEventListener('click', this.imgPreview);
+      });
+      this.linkGroup = document.querySelectorAll('.article-content a');
+      this.linkGroup.forEach(link => {
+        link.addEventListener('click', this.navigate, false);
+      });
+    },
+    removeListeners() {
+      if (this.imgGroup) {
+        this.imgGroup.forEach(img => {
+          img.removeEventListener('click', this.imgPreview);
+        });
+      }
+      if (this.linkGroup) {
+        this.linkGroup.forEach(link => {
+          link.removeEventListener('click', this.navigate, false);
+        });
+      }
+    },
+    imgPreview(e) {
+      // this.imgSrc = e.target.src.replace('https://www.doco.dev', '');
+      this.imgSrc = e.target.src;
+      if (this.imgSrc) {
+        this.showImgPreview = true;
+      }
+    },
+    // https://github.com/nuxt-community/modules/issues/185
+    // https://github.com/nuxt/nuxtjs.org/blob/master/components/HtmlParser.vue
+    navigate(e) {
+      let { target } = e;
+      let i = 0;
+      // Go throught 5 parents max to find a tag
+      while (i < 5 && !(target instanceof HTMLAnchorElement) && target.parentNode) {
+        target = target.parentNode;
+        i++;
+      }
+      if (!(target instanceof HTMLAnchorElement)) return;
+      const href = target.getAttribute('href');
+
+      // Get link target, if local link, navigate with router link
+      if (href && href[0] === '/') {
+        e.preventDefault();
+        this.$router.push(href);
+        return;
+      }
+      if (this.$ga) {
+        // If Google Analytics is activated & is external link
+        // https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+        this.$ga('send', 'event', 'Outbound Link', 'click', target.href);
+      }
+      // external link
+      e.preventDefault();
+      window.open(href);
+    },
   },
 };
 </script>
@@ -42,9 +121,35 @@ export default {
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+
+  pre {
+    margin: 10px 0;
+    & > code {
+      border-radius: 4px;
+      font-family: 'Consolas';
+      /* atom-one-dark */
+      display: block;
+      overflow-x: auto;
+      padding: 0.5em;
+      color: #abb2bf;
+      background: #282c34;
+      font-size: 14px;
+    }
+  }
+
+  blockquote {
+    margin: 10px 0;
+    border-left: 3px solid #409EFF;
+    padding: 10px;
+    background-color: #eee;
+  }
+
   // 代码样式
   code {
-    font-family: 'Consolas';
+    font-family: Helvetica;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
   }
   img,
   video {
@@ -78,6 +183,10 @@ export default {
     tr:nth-child(2n) {
       background-color: #f6f8fa;
     }
+  }
+
+  a {
+    color: #409EFF;
   }
 
   .el-dialog__wrapper {
