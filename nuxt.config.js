@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 export default {
+  server: {
+    port: 7000
+  },
   mode: 'universal',
   /*
   ** Headers of the page
@@ -36,6 +39,7 @@ export default {
       src: '@/plugins/element-ui',
       ssr: true,
     },
+    { src: '@/plugins/ga.js', ssr: false },
     '@/plugins/axios',
   ],
   /*
