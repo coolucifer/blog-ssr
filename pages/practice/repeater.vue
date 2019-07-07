@@ -47,24 +47,31 @@ export default {
   watch: {},
   created() {},
   beforeMount() {
+    const { id } = socket;
+    console.log('socket: ', socket);
+    console.log('id: ', id);
+    // 监听自身id
+    socket.on(id, msg => {
+      console.log('receive: ', msg);
+    });
+    // 接收在线用户信息
+    socket.on('online', msg => {
+      console.log('online: ', msg);
+    });
     socket.on('reply', msg => {
-      this.insertMsg({
-        from: 'server',
-        to: 'me',
-        msg,
-      });
+      this.insertMsg(msg);
     });
   },
   mounted() {},
   methods: {
-    insertMsg({ from, msg }) {
+    insertMsg({ from, msg, timestamp }) {
       this.msgList.push({
         userInfo: {
           userName: from,
           avatar: '',
         },
         content: msg,
-        timestamp: +new Date(),
+        timestamp,
       });
       this.$nextTick(() => {
         const wrap = document.querySelector('.logs .el-scrollbar__wrap');
@@ -81,13 +88,19 @@ export default {
         this.$message.warning('请输入内容');
         return;
       }
-      socket.emit('message', this.sendMsg);
-      console.log('form submit');
-      this.insertMsg({
+      const msg = {
         from: 'me',
         to: 'server',
         msg: this.sendMsg,
+        timestamp: +new Date(),
+      };
+      // emit('...', params, callback)
+      socket.emit('message', msg, () => {
+        msg.isSuccess = true;
+        console.log('send success!');
       });
+      console.log('form submit');
+      this.insertMsg(msg);
       this.sendMsg = '';
     },
   },

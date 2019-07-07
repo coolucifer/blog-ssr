@@ -12,7 +12,7 @@
           {{ data.userInfo.userName || '' }}
         </span>
         <span class="time">
-          {{ data.timeStamp | timeFilter }}
+          {{ data.timestamp | timeFilter }}
         </span>
       </div>
       <div class="bubble">
@@ -29,8 +29,7 @@ export default {
   components: {},
   filters: {
     timeFilter(val) {
-      console.log('time: ', val);
-      return new Date().toLocaleString();
+      return new Date(val).toLocaleString();
     },
   },
   props: {
@@ -55,7 +54,6 @@ export default {
   computed: {
     side() {
       const { userName } = this.data.userInfo;
-      console.log('userName: ', userName);
       return userName === 'me' ? 'right' : 'left';
     },
   },
@@ -64,7 +62,6 @@ export default {
   mounted() {},
   methods: {
     imgErr(e) {
-      console.log('imgErr: ', e);
       const el = e.srcElement;
       el.src = '/default_avatar.jpg';
     },
