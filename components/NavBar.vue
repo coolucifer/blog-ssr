@@ -50,7 +50,6 @@ export default {
           this.activeIndex = 'blog';
           break;
       }
-      console.log('route change: ', to.path, this.activeIndex);
     },
   },
   created() {
@@ -64,8 +63,6 @@ export default {
   mounted() {},
   methods: {
     handleNavSelect(key) {
-      this.activeIndex = key;
-      console.log('select: ', key, this.activeIndex);
       if (key === 'blog') {
         this.$router.push('/');
         return;
