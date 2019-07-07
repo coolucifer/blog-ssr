@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
 ** 只在生产模式的客户端中使用
 */
@@ -20,6 +21,7 @@ export default ({ app: { router }, store }) => {
   ** 每次路由变更时进行pv统计
   */
   router.afterEach((to, from) => {
+    if (!(process.client && process.env.NODE_ENV === 'production')) return;
     /*
     ** 告诉 GA 增加一个 PV
     */
