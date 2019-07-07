@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
 
 export default {
+  env: {
+    WS_URL: process.env.WS_URL || (process.env.NODE_ENV === 'production' ? 'localhost:7001' : 'https://doco.dev'),
+  },
   server: {
-    port: 7000
+    port: process.env.NODE_ENV === 'production' ? 7001 : 3000,
   },
   mode: 'universal',
   /*
