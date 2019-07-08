@@ -3,21 +3,21 @@
   <div class="chat-bubble" :class="side">
     <div class="avatar">
       <slot name="avatar">
-        <img :src="data.userInfo.avatar || ''" alt="avatar" @error="imgErr">
+        <img src="" alt="avatar" @error="imgErr">
       </slot>
     </div>
     <div class="detail">
       <div class="top">
         <span class="name">
-          {{ data.userInfo.userName || '' }}
+          {{ data.client || '' }}
         </span>
-        <span class="time">
+        <!-- <span class="time">
           {{ data.timestamp | timeFilter }}
-        </span>
+        </span> -->
       </div>
       <div class="bubble">
         <slot>
-          <div>{{ data.content || '' }}</div>
+          <div>{{ data.payload.message || '' }}</div>
         </slot>
       </div>
     </div>
@@ -33,6 +33,10 @@ export default {
     },
   },
   props: {
+    side: {
+      type: String,
+      default: 'right',
+    },
     data: {
       type: Object,
       default() {
@@ -51,12 +55,7 @@ export default {
     return {
     };
   },
-  computed: {
-    side() {
-      const { userName } = this.data.userInfo;
-      return userName === 'me' ? 'right' : 'left';
-    },
-  },
+  computed: {},
   watch: {},
   created() {},
   mounted() {},

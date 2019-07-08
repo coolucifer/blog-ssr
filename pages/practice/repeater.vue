@@ -21,6 +21,7 @@
           v-for="(item, index) in msgList"
           :key="index"
           :data="item"
+          :side="getMsgSide(item.client)"
         >
         </chat-bubble>
       </el-scrollbar>
@@ -84,18 +85,25 @@ export default {
     socket.on('reply', msg => {
       this.insertMsg(msg);
     });
+    // 群聊天
+    socket.on('chat', msg => {
+      const message = {
+        client: msg.meta.client,
+        timestamp: msg.meta.timestamp,
+        payload: {
+          message: msg.data.payload.message,
+        },
+      };
+      this.insertMsg(message);
+    });
   },
   mounted() {},
   methods: {
-    insertMsg({ from, msg, timestamp }) {
-      this.msgList.push({
-        userInfo: {
-          userName: from,
-          avatar: '',
-        },
-        content: msg,
-        timestamp,
-      });
+    getMsgSide(client) {
+      return client === socket.id ? 'right' : 'left';
+    },
+    insertMsg(msg) {
+      this.msgList.push(msg);
     },
     submit() {
       const { sendMsg } = this;
@@ -104,18 +112,20 @@ export default {
         return;
       }
       const msg = {
-        from: 'me',
-        to: 'server',
-        msg: this.sendMsg,
-        timestamp: +new Date(),
+        client: socket.id,
+        target: 'server',
+        payload: {
+          message: this.sendMsg,
+        },
+        // timestamp: +new Date(),
       };
       // emit('...', params, callback)
-      socket.emit('message', msg, () => {
+      socket.emit('chat', msg, () => {
         msg.isSuccess = true;
         console.log('send success!');
       });
       console.log('form submit');
-      this.insertMsg(msg);
+      // this.insertMsg(msg);
       this.sendMsg = '';
     },
   },
