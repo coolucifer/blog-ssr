@@ -66,7 +66,7 @@ export default {
         if (!wrap || !(distance > 0)) return;
         const step = () => {
           // 增量小于1的话不会移动
-          wrap.scrollTop += Math.ceil(bottomOffset / 60);
+          wrap.scrollTop += Math.ceil(distance / 30);
           if (wrap.scrollTop < bottomOffset) {
             requestAnimationFrame(step);
           }
