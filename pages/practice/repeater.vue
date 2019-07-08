@@ -29,8 +29,9 @@
 </template>
 
 <script>
-import socket from '@/plugins/socket.io';
+import { socket } from '@/plugins/socket.io';
 import ChatBubble from '@/components/practice/ChatBubble';
+import { mapGetters } from 'vuex';
 
 export default {
   layout: 'blog',
@@ -43,17 +44,22 @@ export default {
       msgList: [],
     };
   },
-  computed: {},
-  watch: {},
+  computed: {
+    ...mapGetters('socket', ['socketId']),
+  },
+  watch: {
+    socketId(newVal) {
+      console.log('watch socketId: ', newVal);
+      const { id } = socket;
+      console.log('connect ==>: ', id);
+      // 监听自身id
+      socket.on(id, msg => {
+        console.log('receive: ', msg);
+      });
+    },
+  },
   created() {},
   beforeMount() {
-    const { id } = socket;
-    console.log('socket: ', socket);
-    console.log('id: ', id);
-    // 监听自身id
-    socket.on(id, msg => {
-      console.log('receive: ', msg);
-    });
     // 接收在线用户信息
     socket.on('online', msg => {
       console.log('online: ', msg);

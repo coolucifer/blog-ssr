@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const socket = io(process.env.WS_URL, {
+export const socket = io(process.env.WS_URL, {
   query: {
     room: 'default',
     userId: `client_${Math.random()}`,
@@ -9,4 +9,10 @@ const socket = io(process.env.WS_URL, {
   transports: ['websocket'],
 });
 
-export default socket;
+export default async ({ store }) => {
+  await socket.on('connect', () => {
+    // how can i update socketId here?
+    store.commit('socket/updateSocketId', socket.id);
+    console.log('socket connected! ', store.getters['socket/socketId']);
+  });
+};

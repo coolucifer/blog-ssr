@@ -2,7 +2,8 @@
 
 export default {
   env: {
-    WS_URL: process.env.WS_URL || (process.env.NODE_ENV === 'production' ? 'localhost:7001' : 'https://doco.dev'),
+    // WS_URL: process.env.WS_URL || (process.env.NODE_ENV === 'production' ? 'localhost:7001' : 'https://doco.dev'),
+    WS_URL: 'localhost:7001',
   },
   server: {
     port: process.env.NODE_ENV === 'production' ? 7001 : 3000,
@@ -44,6 +45,7 @@ export default {
     },
     { src: '@/plugins/ga.js', ssr: false },
     '@/plugins/axios',
+    '@/plugins/socket.io',
   ],
   /*
   ** Nuxt.js modules
