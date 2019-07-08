@@ -28,6 +28,8 @@ module.exports = {
     'linebreak-style': ['off', 'windows'],
     'import/no-unresolved': ['off'],
     'import/no-extraneous-dependencies': ['off'],
-    'vue/html-self-closing': ['off']
+    'vue/html-self-closing': ['off'],
+    'no-shadow': ['off'],
+    'no-param-reassign': ['off'],
   }
 }
