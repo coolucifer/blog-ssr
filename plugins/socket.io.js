@@ -11,7 +11,6 @@ export const socket = io(process.env.WS_URL, {
 
 export default async ({ store }) => {
   await socket.on('connect', () => {
-    // how can i update socketId here?
     store.commit('socket/updateSocketId', socket.id);
     console.log('socket connected! ', store.getters['socket/socketId']);
   });
