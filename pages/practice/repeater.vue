@@ -57,6 +57,23 @@ export default {
         console.log('receive: ', msg);
       });
     },
+    msgList() {
+      this.$nextTick(() => {
+        const wrap = document.querySelector('.logs .el-scrollbar__wrap');
+        const view = document.querySelector('.logs .el-scrollbar__wrap .el-scrollbar__view');
+        const bottomOffset = view.clientHeight - wrap.clientHeight;
+        const distance = bottomOffset - wrap.scrollTop;
+        if (!wrap || !(distance > 0)) return;
+        const step = () => {
+          // 增量小于1的话不会移动
+          wrap.scrollTop += Math.ceil(bottomOffset / 60);
+          if (wrap.scrollTop < bottomOffset) {
+            requestAnimationFrame(step);
+          }
+        };
+        requestAnimationFrame(step);
+      });
+    },
   },
   created() {},
   beforeMount() {
@@ -78,14 +95,6 @@ export default {
         },
         content: msg,
         timestamp,
-      });
-      this.$nextTick(() => {
-        const wrap = document.querySelector('.logs .el-scrollbar__wrap');
-        const view = document.querySelector('.logs .el-scrollbar__wrap .el-scrollbar__view');
-        const bottomOffset = view.clientHeight - wrap.clientHeight;
-        if (!wrap || wrap.scrollTop === bottomOffset) return;
-        // scroll to bottom
-        wrap.scrollTop = bottomOffset;
       });
     },
     submit() {
