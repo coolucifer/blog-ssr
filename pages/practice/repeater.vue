@@ -54,15 +54,6 @@ export default {
     ...mapGetters('socket', ['socketId']),
   },
   watch: {
-    socketId(newVal) {
-      console.log('watch socketId: ', newVal);
-      const { id } = socket;
-      console.log('connect ==>: ', id);
-      // 监听自身id
-      socket.on(id, msg => {
-        console.log('receive: ', msg);
-      });
-    },
     msgList() {
       this.$nextTick(() => {
         const wrap = document.querySelector('.logs .el-scrollbar__wrap');
@@ -83,6 +74,10 @@ export default {
   },
   created() {},
   beforeMount() {
+    const { userId } = socket.query;
+    socket.on(userId, msg => {
+      console.log('receive: ', msg);
+    });
     socket.emit('online-list', 'default', clients => {
       console.log('current clients: ', clients);
     });

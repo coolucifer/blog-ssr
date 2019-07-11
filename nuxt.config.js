@@ -45,7 +45,7 @@ export default {
     },
     { src: '@/plugins/ga.js', ssr: false },
     '@/plugins/axios',
-    '@/plugins/socket.io',
+    // '@/plugins/socket.io',
   ],
   /*
   ** Nuxt.js modules
