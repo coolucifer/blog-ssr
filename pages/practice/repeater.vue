@@ -2,6 +2,21 @@
 <template>
   <div class="repeater">
     <div class="main-area">
+      <transition name="fade">
+        <div v-if="showMask" class="mask">
+          <el-card>
+            <h3>输入昵称以连接到服务器</h3>
+            <el-form @submit.native.prevent="setNickname">
+              <el-form-item>
+                <el-input v-model="nickname"></el-input>
+                <el-button type="primary" size="mini" @click="setNickname">
+                  确认
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </div>
+      </transition>
       <h1>人类的本质是复读机</h1>
       <div class="repeater-body">
         <el-form @submit.native.prevent="submit">
@@ -35,7 +50,7 @@
 </template>
 
 <script>
-import { socket } from '@/plugins/socket.io';
+import socket from '@/plugins/socket.io';
 import ChatBubble from '@/components/practice/ChatBubble';
 import { mapGetters } from 'vuex';
 
@@ -46,6 +61,8 @@ export default {
   },
   data() {
     return {
+      showMask: true,
+      nickname: '',
       sendMsg: '',
       msgList: [],
     };
@@ -72,8 +89,11 @@ export default {
       });
     },
   },
+  asyncData() {},
   created() {},
-  beforeMount() {
+  async beforeMount() {
+    await socket.connect();
+    console.log('socket: ', socket);
     const { userId } = socket.query;
     socket.on(userId, msg => {
       console.log('receive: ', msg);
@@ -102,6 +122,10 @@ export default {
   },
   mounted() {},
   methods: {
+    setNickname() {
+      this.showMask = false;
+      console.log('set Nickname');
+    },
     getMsgSide(client) {
       return client === socket.id ? 'right' : 'left';
     },
@@ -144,6 +168,7 @@ export default {
   grid-column-gap: 20px;
   grid-template-areas: 'main side';
   .main-area {
+    position: relative;
     grid-area: main;
     display: flex;
     flex-direction: column;
@@ -155,6 +180,33 @@ export default {
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    overflow: hidden;
+    .mask {
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #80808080;
+      .el-card {
+        width: 50%;
+        user-select: none;
+        .el-form-item {
+          margin-bottom: 0;
+        }
+        h3 {
+          margin-bottom: 10px;
+        }
+        .el-button {
+          margin-top: 10px;
+          float: right;
+        }
+      }
+    }
     h3 {
       font-size: 16px;
       color: #2c3e50;
@@ -182,6 +234,12 @@ export default {
     // position: sticky;
     margin-top: 330px;
     margin-bottom: 10px;
+  }
+  .fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 }
 </style>
