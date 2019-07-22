@@ -1,17 +1,23 @@
 import io from 'socket.io-client';
 
-export const socket = io(process.env.WS_URL, {
-  query: {
-    room: 'default',
-    userId: `client_${Math.random()}`,
-  },
-  // 直接使用websocket方式传输, 而不是由http升级
-  transports: ['websocket'],
-});
-
-export default async ({ store }) => {
-  await socket.on('connect', () => {
-    store.commit('socket/updateSocketId', socket.id);
-    console.log('socket connected! ', store.getters['socket/socketId']);
+function SocketIO() {
+  this.connect = () => new Promise(resolve => {
+    const socket = io(process.env.WS_URL,
+      {
+        query: {
+          room: 'default',
+          userId: `client_${Math.random()}`,
+        },
+        // 直接使用websocket方式传输, 而不是由http升级
+        transports: ['websocket'],
+      });
+    // __proto__是内部属性, 未纳入ES6标准, 不可以直接设置. 要用Object.setPrototypeOf()代替
+    Object.setPrototypeOf(this, socket);
+    socket.on('connect', () => {
+      console.log('socket connect');
+      resolve();
+    });
   });
-};
+}
+
+export default new SocketIO();
