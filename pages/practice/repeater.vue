@@ -52,7 +52,7 @@
 <script>
 import socket from '@/plugins/socket.io';
 import ChatBubble from '@/components/practice/ChatBubble';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   layout: 'blog',
@@ -68,7 +68,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('socket', ['socketId']),
+    ...mapGetters('socket', ['socketUserId', 'socketNickname']),
   },
   watch: {
     msgList() {
@@ -91,40 +91,50 @@ export default {
   },
   asyncData() {},
   created() {},
-  async beforeMount() {
-    await socket.connect();
-    console.log('socket: ', socket);
-    const { userId } = socket.query;
-    socket.on(userId, msg => {
-      console.log('receive: ', msg);
-    });
-    socket.emit('online-list', 'default', clients => {
-      console.log('current clients: ', clients);
-    });
-    // 接收在线用户信息
-    socket.on('online', msg => {
-      console.log('online: ', msg);
-    });
-    socket.on('reply', msg => {
-      this.insertMsg(msg);
-    });
-    // 群聊天
-    socket.on('chat', msg => {
-      const message = {
-        client: msg.meta.client,
-        timestamp: msg.meta.timestamp,
-        payload: {
-          message: msg.data.payload.message,
-        },
-      };
-      this.insertMsg(message);
-    });
+  beforeMount() {
+    if (this.socketNickname) {
+      this.showMask = false;
+    }
   },
   mounted() {},
   methods: {
+    ...mapMutations('socket', ['updateSocketUserId', 'updateSocketNickname']),
     setNickname() {
+      const { nickname } = this;
       this.showMask = false;
+      this.updateSocketNickname(nickname);
+      this.initSocket(nickname);
       console.log('set Nickname');
+    },
+    async initSocket(nickname) {
+      await socket.connect(nickname);
+      console.log('socket: ', socket);
+      const { userId } = socket.query;
+      this.updateSocketUserId(userId);
+      socket.on(userId, msg => {
+        console.log('receive: ', msg);
+      });
+      socket.emit('online-list', 'default', clients => {
+        console.log('current clients: ', clients);
+      });
+      // 接收在线用户信息
+      socket.on('online', msg => {
+        console.log('online: ', msg);
+      });
+      socket.on('reply', msg => {
+        this.insertMsg(msg);
+      });
+      // 群聊天
+      socket.on('chat', msg => {
+        const message = {
+          client: msg.meta.client,
+          timestamp: msg.meta.timestamp,
+          payload: {
+            message: msg.data.payload.message,
+          },
+        };
+        this.insertMsg(message);
+      });
     },
     getMsgSide(client) {
       return client === socket.id ? 'right' : 'left';
@@ -162,11 +172,11 @@ export default {
 <style lang="scss">
 .repeater {
   // 扩展范围, 以显示侧边在线列表
-  grid-area: 1/1/2/3;
   display: grid;
+  grid-area: 1/1/2/3;
+  grid-template-areas: 'main side';
   grid-template-columns: calc(100% - 320px)  300px;
   grid-column-gap: 20px;
-  grid-template-areas: 'main side';
   .main-area {
     position: relative;
     grid-area: main;

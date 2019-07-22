@@ -1,12 +1,13 @@
 import io from 'socket.io-client';
 
 function SocketIO() {
-  this.connect = () => new Promise(resolve => {
+  this.connect = nickname => new Promise(resolve => {
     const socket = io(process.env.WS_URL,
       {
         query: {
           room: 'default',
           userId: `client_${Math.random()}`,
+          nickname,
         },
         // 直接使用websocket方式传输, 而不是由http升级
         transports: ['websocket'],

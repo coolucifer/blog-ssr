@@ -1,13 +1,18 @@
 export const state = () => ({
-  socketId: '',
+  socketUserId: '',
+  socketNickname: '',
 });
 
 export const getters = {
-  socketId: state => state.socketId,
+  socketUserId: state => state.socketUserId,
+  socketNickname: state => state.socketNickname,
 };
 
 export const mutations = {
-  updateSocketId(state, id) {
-    state.socketId = id;
+  updateSocketUserId(state, id) {
+    state.socketUserId = id;
+  },
+  updateSocketNickname(state, socketNickname) {
+    state.socketNickname = socketNickname;
   },
 };
