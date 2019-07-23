@@ -6,10 +6,10 @@
         <div v-if="showMask" class="mask">
           <el-card>
             <h3>输入昵称以连接到服务器</h3>
-            <el-form @submit.native.prevent="setNickname">
+            <el-form @submit.native.prevent="setUserName">
               <el-form-item>
-                <el-input v-model="nickname"></el-input>
-                <el-button type="primary" size="mini" @click="setNickname">
+                <el-input v-model="userName"></el-input>
+                <el-button type="primary" size="mini" @click="setUserName">
                   确认
                 </el-button>
               </el-form-item>
@@ -62,13 +62,13 @@ export default {
   data() {
     return {
       showMask: true,
-      nickname: '',
+      userName: '',
       sendMsg: '',
       msgList: [],
     };
   },
   computed: {
-    ...mapGetters('socket', ['socketUserId', 'socketNickname']),
+    ...mapGetters('socket', ['socketUserId', 'socketUserName']),
   },
   watch: {
     msgList() {
@@ -92,48 +92,42 @@ export default {
   asyncData() {},
   created() {},
   beforeMount() {
-    if (this.socketNickname) {
+    if (this.socketUserName) {
       this.showMask = false;
     }
   },
   mounted() {},
   methods: {
-    ...mapMutations('socket', ['updateSocketUserId', 'updateSocketNickname']),
-    setNickname() {
-      const { nickname } = this;
+    ...mapMutations('socket', ['updateSocketUserId', 'updateSocketUserName']),
+    setUserName() {
+      const { userName } = this;
       this.showMask = false;
-      this.updateSocketNickname(nickname);
-      this.initSocket(nickname);
-      console.log('set Nickname');
+      this.updateSocketUserName(userName);
+      this.initSocket(userName);
+      console.log('set UserName');
     },
-    async initSocket(nickname) {
-      await socket.connect(nickname);
+    async initSocket(userName) {
+      await socket.connect(userName);
+      socket.emit('online-list', msg => {
+        console.log('current online: ', msg);
+      });
       console.log('socket: ', socket);
       const { userId } = socket.query;
       this.updateSocketUserId(userId);
       socket.on(userId, msg => {
         console.log('receive: ', msg);
       });
-      socket.emit('online-list', 'default', clients => {
-        console.log('current clients: ', clients);
+      // 加入
+      socket.on('join', msg => {
+        console.log('someone joined this room: ', msg);
       });
-      // 接收在线用户信息
-      socket.on('online', msg => {
-        console.log('online: ', msg);
+      // 离开
+      socket.on('leave', msg => {
+        console.log('someone left this room: ', msg);
       });
-      socket.on('reply', msg => {
-        this.insertMsg(msg);
-      });
-      // 群聊天
-      socket.on('chat', msg => {
-        const message = {
-          client: msg.meta.client,
-          timestamp: msg.meta.timestamp,
-          payload: {
-            message: msg.data.payload.message,
-          },
-        };
-        this.insertMsg(message);
+      // 接收消息
+      socket.on('receive', msg => {
+        console.log('receive msg: ', msg);
       });
     },
     getMsgSide(client) {
