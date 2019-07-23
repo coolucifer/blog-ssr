@@ -45,6 +45,12 @@
     </div>
     <el-card class="side-area">
       <span slot="header">在线列表</span>
+      <div v-for="item in onlineList" :key="item.id" class="online-item">
+        <img :src="item.userInfo.avatar || defaultAvatar" alt="" class="avatar">
+        <span class="user-name">
+          {{ item.userInfo.userName }}
+        </span>
+      </div>
     </el-card>
   </div>
 </template>
@@ -53,6 +59,7 @@
 import socket from '@/plugins/socket.io';
 import ChatBubble from '@/components/practice/ChatBubble';
 import { mapGetters, mapMutations } from 'vuex';
+import defaultAvatar from '@/assets/images/default_avatar.jpg';
 
 export default {
   layout: 'blog',
@@ -61,10 +68,12 @@ export default {
   },
   data() {
     return {
+      defaultAvatar,
       showMask: true,
       userName: '',
       sendMsg: '',
       msgList: [],
+      onlineList: [],
     };
   },
   computed: {
@@ -101,6 +110,10 @@ export default {
     ...mapMutations('socket', ['updateSocketUserId', 'updateSocketUserName']),
     setUserName() {
       const { userName } = this;
+      if (!userName) {
+        this.$message.warning('请输入昵称');
+        return;
+      }
       this.showMask = false;
       this.updateSocketUserName(userName);
       this.initSocket(userName);
@@ -110,6 +123,7 @@ export default {
       await socket.connect(userName);
       socket.emit('online-list', msg => {
         console.log('current online: ', msg);
+        this.onlineList = msg;
       });
       console.log('socket: ', socket);
       const { userId } = socket.query;
@@ -238,6 +252,39 @@ export default {
     // position: sticky;
     margin-top: 330px;
     margin-bottom: 10px;
+    .online-item {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      user-select: none;
+      cursor: pointer;
+      .avatar {
+        flex-shrink: 0;
+        margin-right: 5px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .user-name {
+        flex-grow: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      &:nth-child(1) {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+      }
+      &:nth-last-child(1) {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
+      &:nth-child(n + 2) {
+        border-top: none;
+      }
+    }
   }
   .fade-enter-active, .fade-leave-active {
   transition: opacity .3s;
