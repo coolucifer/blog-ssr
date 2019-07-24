@@ -37,7 +37,7 @@
             v-for="(item, index) in msgList"
             :key="index"
             :data="item"
-            :side="getMsgSide(item.client)"
+            :side="getMsgSide(item.id)"
           >
           </chat-bubble>
         </el-scrollbar>
@@ -77,8 +77,8 @@ export default {
       // [Element Warn][Form]model is required for validate to work!
       emptyForm: {},
       rules: {
-        userNameInput: [{ validator: this.checkNickname, trigger: 'blur' }],
-        messageInput: [{ validator: this.checkMessage, trigger: 'blur' }],
+        userNameInput: [{ validator: this.checkNickname, trigger: 'submit' }],
+        messageInput: [{ validator: this.checkMessage, trigger: 'submit' }],
       },
     };
   },
@@ -144,52 +144,75 @@ export default {
     },
     async initSocket(userName) {
       await socket.connect(userName);
+      const { userId } = socket.query;
+      this.updateSocketUserId(userId);
+      // 获取在线列表
       socket.emit('online-list', msg => {
         console.log('current online: ', msg);
         this.onlineList = msg;
       });
-      console.log('socket: ', socket);
-      const { userId } = socket.query;
-      this.updateSocketUserId(userId);
       socket.on(userId, msg => {
         console.log('receive: ', msg);
       });
       // 加入
       socket.on('join', msg => {
         console.log('someone joined this room: ', msg);
+        if (!this.onlineList.find(user => user.id === msg.id)) {
+          this.onlineList.push(msg);
+        }
       });
       // 离开
       socket.on('leave', msg => {
         console.log('someone left this room: ', msg);
+        const userIndex = this.onlineList.findIndex(user => user.id === msg.id);
+        if (userIndex < 0) return;
+        this.onlineList.splice(userIndex, 1);
       });
       // 接收消息
-      socket.on('receive', msg => {
+      socket.on('message', msg => {
         console.log('receive msg: ', msg);
+        this.insertMsg(msg);
       });
     },
-    getMsgSide(client) {
-      return client === socket.id ? 'right' : 'left';
+    getMsgSide(id) {
+      return id === socket.id ? 'right' : 'left';
     },
     insertMsg(msg) {
       this.msgList.push(msg);
     },
     sendMsg() {
-      const { message } = this;
+      const { message, socketUserId, socketUserName } = this;
       if (!message) return;
+      // const msg = {
+      //   client: socket.id,
+      //   target: 'server',
+      //   payload: {
+      //     message: this.message,
+      //   },
+      //   // timestamp: +new Date(),
+      // };
+
       const msg = {
-        client: socket.id,
-        target: 'server',
-        payload: {
-          message: this.message,
+        type: 'room',
+        id: socket.id,
+        from: {
+          userId: socketUserId,
+          userName: socketUserName,
         },
-        // timestamp: +new Date(),
+        to: 'default',
+        message,
+        timestamp: +new Date(),
       };
-      // emit('...', params, callback)
-      socket.emit('chat', msg, () => {
-        msg.isSuccess = true;
+
+      socket.emit('message', msg, () => {
         console.log('send success!');
       });
-      console.log('form submit');
+
+      // emit('...', params, callback)
+      // socket.emit('chat', msg, () => {
+      //   msg.isSuccess = true;
+      //   console.log('send success!');
+      // });
       // this.insertMsg(msg);
       this.message = '';
     },

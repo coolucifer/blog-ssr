@@ -9,7 +9,7 @@
     <div class="detail">
       <div class="top">
         <span class="name">
-          {{ data.client || '' }}
+          {{ from }}
         </span>
         <!-- <span class="time">
           {{ data.timestamp | timeFilter }}
@@ -17,7 +17,7 @@
       </div>
       <div class="bubble">
         <slot>
-          <div>{{ data.payload.message || '' }}</div>
+          <div>{{ data.message || '' }}</div>
         </slot>
       </div>
     </div>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import defaultAvatar from '@/assets/images/default_avatar.jpg';
+
 export default {
   components: {},
   filters: {
@@ -52,17 +54,23 @@ export default {
     },
   },
   data() {
-    return {
-    };
+    return {};
   },
-  computed: {},
+  computed: {
+    from() {
+      const { from } = this.data;
+      if (!from) return '';
+      return from.userName;
+    },
+  },
   watch: {},
   created() {},
   mounted() {},
   methods: {
     imgErr(e) {
       const el = e.srcElement;
-      el.src = '/default_avatar.jpg';
+      // el.src = '/default_avatar.jpg';
+      el.src = defaultAvatar;
     },
   },
 };
