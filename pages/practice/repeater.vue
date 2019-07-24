@@ -44,7 +44,7 @@
       </div>
     </div>
     <el-card class="side-area">
-      <span slot="header">在线列表</span>
+      <span slot="header">在线列表 <span v-show="onlineList.length">({{ onlineList.length }})</span></span>
       <div v-for="item in onlineList" :key="item.id" class="online-item">
         <img :src="item.userInfo.avatar || defaultAvatar" alt="" class="avatar">
         <span class="user-name">
@@ -119,6 +119,9 @@ export default {
       if (!userName) {
         return callback(new Error('昵称不能为空'));
       }
+      if (userName.length > 10) {
+        return callback(new Error('昵称长度不能大于十位'));
+      }
       return callback();
     },
     checkMessage(rule, value, callback) {
@@ -171,7 +174,9 @@ export default {
       // 接收消息
       socket.on('message', msg => {
         console.log('receive msg: ', msg);
-        this.insertMsg(msg);
+        if (msg.from.userId !== this.socketUserId) {
+          this.insertMsg(msg);
+        }
       });
     },
     getMsgSide(id) {
@@ -213,7 +218,7 @@ export default {
       //   msg.isSuccess = true;
       //   console.log('send success!');
       // });
-      // this.insertMsg(msg);
+      this.insertMsg(msg);
       this.message = '';
     },
   },
@@ -309,7 +314,7 @@ export default {
       cursor: pointer;
       .avatar {
         flex-shrink: 0;
-        margin-right: 5px;
+        margin-right: 10px;
         width: 40px;
         height: 40px;
         border-radius: 50%;

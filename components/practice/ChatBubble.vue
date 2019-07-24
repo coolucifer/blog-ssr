@@ -87,6 +87,10 @@ export default {
     flex-direction: row-reverse;
     .detail {
       align-items: flex-end;
+      .bubble {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 0;
+      }
     }
     .top {
       flex-direction: row-reverse;
@@ -121,6 +125,9 @@ export default {
       padding: 10px;
       word-break: break-all;
       box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+      background-color: #ccc;
+      border-radius: 10px;
+      border-top-left-radius: 0;
     }
   }
 }
