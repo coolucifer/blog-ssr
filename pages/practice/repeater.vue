@@ -43,7 +43,7 @@
         </el-scrollbar>
       </div>
     </div>
-    <el-card class="side-area">
+    <el-card v-show="socketUserId" class="side-area">
       <span slot="header">在线列表 <span v-show="onlineList.length">({{ onlineList.length }})</span></span>
       <div v-for="item in onlineList" :key="item.id" class="online-item">
         <img :src="item.userInfo.avatar || defaultAvatar" alt="" class="avatar">
