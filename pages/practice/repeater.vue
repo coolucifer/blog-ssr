@@ -6,26 +6,26 @@
         <div v-if="showMask" class="mask">
           <el-card>
             <h3>输入昵称以连接到服务器</h3>
-            <el-form @submit.native.prevent="setUserName">
-              <el-form-item>
+            <el-form ref="userNameForm" :model="emptyForm" :rules="rules" @submit.native.prevent="submitForm('userNameForm', setUserName)">
+              <el-form-item prop="userNameInput">
                 <el-input v-model="userName"></el-input>
-                <el-button type="primary" size="mini" @click="setUserName">
-                  确认
-                </el-button>
               </el-form-item>
+              <el-button type="primary" size="mini" @click="submitForm('userNameForm', setUserName)">
+                确认
+              </el-button>
             </el-form>
           </el-card>
         </div>
       </transition>
       <h1>人类的本质是复读机</h1>
       <div class="repeater-body">
-        <el-form @submit.native.prevent="submit">
-          <el-form-item>
-            <h3 slot="label">
-              输入:
-            </h3>
-            <el-input v-model="sendMsg" placeholder="请输入消息">
-              <el-button slot="append" @click="submit">
+        <el-form ref="messageForm" :model="emptyForm" :rules="rules" @submit.native.prevent="submitForm('messageForm', sendMsg)">
+          <h3 slot="label">
+            输入:
+          </h3>
+          <el-form-item prop="messageInput">
+            <el-input v-model="message" placeholder="请输入消息">
+              <el-button slot="append" @click="submitForm('messageForm', sendMsg)">
                 发送
               </el-button>
             </el-input>
@@ -71,9 +71,15 @@ export default {
       defaultAvatar,
       showMask: true,
       userName: '',
-      sendMsg: '',
+      message: '',
       msgList: [],
       onlineList: [],
+      // [Element Warn][Form]model is required for validate to work!
+      emptyForm: {},
+      rules: {
+        userNameInput: [{ validator: this.checkNickname, trigger: 'blur' }],
+        messageInput: [{ validator: this.checkMessage, trigger: 'blur' }],
+      },
     };
   },
   computed: {
@@ -108,12 +114,29 @@ export default {
   mounted() {},
   methods: {
     ...mapMutations('socket', ['updateSocketUserId', 'updateSocketUserName']),
-    setUserName() {
+    checkNickname(rule, value, callback) {
       const { userName } = this;
       if (!userName) {
-        this.$message.warning('请输入昵称');
-        return;
+        return callback(new Error('昵称不能为空'));
       }
+      return callback();
+    },
+    checkMessage(rule, value, callback) {
+      const { message } = this;
+      if (!message) {
+        return callback(new Error('请输入消息内容'));
+      }
+      return callback();
+    },
+    submitForm(formName, callback) {
+      this.$refs[formName].validate(valid => {
+        if (!valid) return false;
+        return callback();
+      });
+    },
+    setUserName() {
+      const { userName } = this;
+      if (!userName) return;
       this.showMask = false;
       this.updateSocketUserName(userName);
       this.initSocket(userName);
@@ -150,17 +173,14 @@ export default {
     insertMsg(msg) {
       this.msgList.push(msg);
     },
-    submit() {
-      const { sendMsg } = this;
-      if (!sendMsg) {
-        this.$message.warning('请输入内容');
-        return;
-      }
+    sendMsg() {
+      const { message } = this;
+      if (!message) return;
       const msg = {
         client: socket.id,
         target: 'server',
         payload: {
-          message: this.sendMsg,
+          message: this.message,
         },
         // timestamp: +new Date(),
       };
@@ -171,7 +191,7 @@ export default {
       });
       console.log('form submit');
       // this.insertMsg(msg);
-      this.sendMsg = '';
+      this.message = '';
     },
   },
 };
@@ -213,7 +233,13 @@ export default {
       .el-card {
         width: 50%;
         user-select: none;
+        .el-form {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+        }
         .el-form-item {
+          width: 100%;
           margin-bottom: 0;
         }
         h3 {
@@ -221,7 +247,6 @@ export default {
         }
         .el-button {
           margin-top: 10px;
-          float: right;
         }
       }
     }
