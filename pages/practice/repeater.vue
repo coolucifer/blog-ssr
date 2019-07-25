@@ -45,12 +45,15 @@
     </div>
     <el-card v-show="socketUserId" class="side-area">
       <span slot="header">在线列表 <span v-show="onlineList.length">({{ onlineList.length }})</span></span>
-      <div v-for="item in onlineList" :key="item.id" class="online-item">
-        <img :src="item.userInfo.avatar || defaultAvatar" alt="" class="avatar">
-        <span class="user-name">
-          {{ item.userInfo.userName }}
-        </span>
-      </div>
+      <el-scrollbar>
+        <!-- <div v-for="item in onlineList" :key="item.id" class="online-item"> -->
+        <div v-for="item in onlineList" :key="item.index" class="online-item">
+          <img :src="item.userInfo.avatar || defaultAvatar" alt="" class="avatar">
+          <span class="user-name">
+            {{ item.userInfo.userName }}
+          </span>
+        </div>
+      </el-scrollbar>
     </el-card>
   </div>
 </template>
@@ -302,9 +305,28 @@ export default {
     }
   }
   .side-area {
-    // position: sticky;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 420px);
+    height: calc(100vh - 420px);
     margin-top: 330px;
     margin-bottom: 10px;
+    .el-card__header {
+      flex-shrink: 0;
+    }
+    .el-card__body {
+      flex-grow: 1;
+      position: relative;
+      .el-scrollbar {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        border-radius: 4px;
+        box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+      }
+    }
     .online-item {
       display: flex;
       align-items: center;
