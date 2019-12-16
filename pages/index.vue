@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ArticleCard from '@/components/ArticleCard';
+import ArticleCard from '@/components/ArticleCard.vue';
 
 export default {
   layout: 'blog',

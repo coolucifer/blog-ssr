@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 export default {
+  buildDir: 'nuxt',
   env: {
-    // WS_URL: process.env.WS_URL || (process.env.NODE_ENV === 'production' ? 'localhost:7001' : 'https://doco.dev'),
-    WS_URL: 'localhost:7001',
+    WS_URL: process.env.NODE_ENV === 'production' ? 'https://doco.dev' : 'localhost:7001',
   },
   server: {
     port: process.env.NODE_ENV === 'production' ? 7001 : 3000,
@@ -66,7 +66,8 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'https://doco.dev',
+      // target: 'https://doco.dev',
+      target: 'http://localhost:7001',
       // 开启跨域
       changeOrigin: true,
     },

@@ -7,13 +7,19 @@
       <!-- 灰色遮罩部分 -->
       <el-collapse-transition>
         <div v-show="showCover" class="home-cover" @mousewheel="onMouseWheel">
-          <el-button type="text" @click="onMouseWheel">
+          <div class="type-area">
+            <p>Hello, I'm</p>
+            <p class="bold large-font">Doco</p>
+            <p>and I'm a</p>
+            <p class="bold large-font">Developer</p>
+          </div>
+          <el-button class="scroll-btn" type="text" v-show="showBtn" @click="onMouseWheel">
             <i class="iconfont icon-arrow-down" />
           </el-button>
         </div>
       </el-collapse-transition>
     </div>
-    <div class="container">
+    <div class="container" @mousewheel="onContainerMouseWheel">
       <nav-bar></nav-bar>
       <el-scrollbar
         id="scroll-box"
@@ -31,8 +37,9 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
-import SideList from '@/components/SideList';
+import NavBar from '@/components/NavBar.vue';
+import SideList from '@/components/SideList.vue';
+import Typer from '@/utils/typer.js';
 
 export default {
   components: {
@@ -42,6 +49,7 @@ export default {
   data() {
     return {
       showCover: false,
+      showBtn: false,
       bgImgStyle: {
         'background-image': 'url(63740442_p0.png)',
       },
@@ -52,28 +60,36 @@ export default {
   computed: {
     showHeaderImg() {
       // return this.$route.path === '/';
-      return false;
+      return true;
+      // return false;
     },
   },
   created() {
     this.showCover = this.$route.path === '/';
   },
+  mounted() {
+    const el = document.querySelector('.type-area');
+    console.log('el: ', el);
+    Typer(el, {}, () => {
+      this.showBtn = true;
+    });
+  },
   methods: {
     onMouseWheel(e) {
+      if (!this.showBtn) return;
       // 鼠标滚轮向下滚动
       if (!e.wheelDelta || e.wheelDelta < 0) {
         this.showCover = false;
       }
     },
     onContainerMouseWheel(e) {
-      console.log('wheel: ', this);
       if (this.$route.path !== '/') {
         return;
       }
       const wrapperTop = this.$refs.scrollbar.$refs.wrap.scrollTop;
       // 鼠标向上滚动 && 页面中滚动框已滚到最上
       if (e.wheelDelta > 0 && Number(wrapperTop) === 0) {
-        this.wheelTop = this.wheelTop + 1;
+        this.wheelTop++;
       } else {
         this.wheelTop = 0;
       }
@@ -102,12 +118,30 @@ export default {
       background-position: 50%;
     }
     .home-cover {
+      position: relative;
       display: flex;
       justify-content: center;
-      align-items: flex-end;
+      align-items: center;
       height: 100vh;
       padding-bottom: 20px;
       background-color: rgba(0, 0, 0, .5);
+      .type-area {
+        font-size: 40px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        .large-font {
+          font-size: 50px;
+        }
+        .bold {
+          font-weight: 1000;
+        }
+      }
+      .scroll-btn {
+        position: absolute;
+        bottom: 10px;
+        left: calc(50% - 26px);
+      }
       .el-button--text {
         padding: 0;
         color: #e4e4e4;
@@ -125,9 +159,10 @@ export default {
     flex-direction: column;
     margin: 0 auto;
     height: 100vh;
+    background-color: #fff;
     .scroll-bar {
       flex-grow: 1;
-      width: 100vw;
+      width: 100%;
       .el-scrollbar__wrap {
         // 元素自带-17px, don't know why
         // 为了隐藏系统scrollbar, 下面的样式firefox,ie兼容性不佳
@@ -139,7 +174,7 @@ export default {
       }
       .el-scrollbar__view {
         // scrollbar最内层元素
-        padding: 10px;
+        padding: 10px 10px 20px 10px;
         .grid-layout {
           width: 1040px;
           max-width: 100%;

@@ -29,6 +29,10 @@ module.exports = {
     'import/no-unresolved': ['off'],
     'import/no-extraneous-dependencies': ['off'],
     'vue/html-self-closing': ['off'],
+    'vue/attributes-order': ['off'],
+    'vue/singleline-html-element-content-newline': ['off'],
+    'import/extensions': ['off'],
+    'max-classes-per-file': ['off'],
     'no-shadow': ['off'],
     'no-param-reassign': ['off'],
   }

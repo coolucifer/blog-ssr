@@ -14,22 +14,12 @@
 </template>
 
 <script>
-import marked from '@/utils/marked';
+import marked from '@/utils/marked.js';
 
 export default {
   layout: 'blog',
   name: 'ArticleContent',
   components: {
-  },
-  data() {
-    return {
-      showImgPreview: false,
-      imgSrc: '',
-    };
-  },
-  computed: {
-  },
-  watch: {
   },
   async asyncData({ $axios, params }) {
     const { id } = params;
@@ -44,6 +34,16 @@ export default {
     return {
       content,
     };
+  },
+  data() {
+    return {
+      showImgPreview: false,
+      imgSrc: '',
+    };
+  },
+  computed: {
+  },
+  watch: {
   },
   mounted() {
     this.addListeners();
