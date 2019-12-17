@@ -12,6 +12,10 @@ html {
   box-sizing: border-box;
   color: #2c3e50;
 }
+/* hide scroll-bar in Chrome */
+body::-webkit-scrollbar {
+  display: none;
+}
 
 *,
 *:before,
