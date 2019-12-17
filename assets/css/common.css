@@ -16,6 +16,10 @@ html {
 body::-webkit-scrollbar {
   display: none;
 }
+/* hide scroll-bar in IE/EDGE */
+body {
+  -ms-overflow-style: none;
+}
 
 *,
 *:before,
