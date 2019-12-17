@@ -33,4 +33,7 @@ export default {
 </script>
 
 <style lang="scss">
+.index-page {
+  padding-bottom: 10px;
+}
 </style>
