@@ -8,10 +8,6 @@
       <el-collapse-transition>
         <div v-show="showCover" class="home-cover" @mousewheel="onMouseWheel">
           <div class="type-area">
-            <p>Hello, I'm</p>
-            <p class="bold large-font">Doco</p>
-            <p>and I'm a</p>
-            <p class="bold large-font">Developer</p>
           </div>
           <el-button class="scroll-btn" type="text" v-show="showBtn" @click="onMouseWheel">
             <i class="iconfont icon-arrow-down" />
@@ -55,6 +51,11 @@ export default {
       },
       // 鼠标向上滚动计数器
       wheelTop: 0,
+      typeHTML: `
+      <p>Hello, I'm</p>
+      <p class="bold large-font">Doco</p>
+      <p>and I'm a</p>
+      <p class="bold large-font">Developer</p>`,
     };
   },
   computed: {
@@ -69,8 +70,7 @@ export default {
   },
   mounted() {
     const el = document.querySelector('.type-area');
-    console.log('el: ', el);
-    Typer(el, {}, () => {
+    Typer(el, { html: this.typeHTML }, () => {
       this.showBtn = true;
     });
   },
@@ -83,6 +83,7 @@ export default {
       }
     },
     onContainerMouseWheel(e) {
+      if (e) return;
       if (this.$route.path !== '/') {
         return;
       }

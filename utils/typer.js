@@ -1,8 +1,6 @@
 function Typer(el, { html, duration = 100 }, callback) {
-  console.log('arguments: ', el, html, duration);
   if (!el) return;
   const originHTML = html ? html.replace(/\r|\n/g, '') : el.innerHTML.replace(/\r|\n/g, '');
-  console.log('originHTML: ', originHTML);
   if (!originHTML) return;
   let curIndex = 0;
   el.innerHTML = null;
