@@ -47,7 +47,8 @@ export default {
       showCover: false,
       showBtn: false,
       bgImgStyle: {
-        'background-image': 'url(63740442_p0.png)',
+        // 'background-image': 'url(63740442_p0.png)',
+        'background-image': 'url(77991355_p0.jpg)',
       },
       // 鼠标向上滚动计数器
       wheelTop: 0,
@@ -131,6 +132,7 @@ export default {
         font-weight: bold;
         color: #fff;
         text-align: center;
+        line-height: 1;
         .large-font {
           font-size: 50px;
         }
@@ -175,7 +177,7 @@ export default {
       }
       .el-scrollbar__view {
         // scrollbar最内层元素
-        padding: 10px 10px 20px 10px;
+        padding: 10px;
         .grid-layout {
           width: 1040px;
           max-width: 100%;
