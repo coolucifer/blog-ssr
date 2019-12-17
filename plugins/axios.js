@@ -1,6 +1,6 @@
 export default function ({ $axios, redirect }) {
   $axios.onRequest(config => {
-    console.log(`[${new Date}] Making request to ${config.url}`);
+    console.log(`[${new Date()}] Making request to ${config.url}`);
   });
   $axios.onError(error => {
     const code = +(error.response && error.response.status);
