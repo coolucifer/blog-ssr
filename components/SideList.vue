@@ -50,6 +50,11 @@ export default {
       const { searchValue } = this;
       console.log('search: ', searchValue);
       this.$emit('search', searchValue);
+      this.$message({
+        message: '搜索功能暂不可用',
+        type: 'warning',
+        showClose: true,
+      });
     },
     clearFocus() {
       const el = document.activeElement;
