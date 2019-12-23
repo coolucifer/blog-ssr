@@ -98,6 +98,10 @@ export default {
     font-weight: bold;
     height: 56px;
     padding-left: 20px;
+    &:visited,
+    &:active {
+      color: inherit;
+    }
   }
   .el-menu {
     display: flex;
