@@ -6,8 +6,8 @@
       <div class="home-background" :style="bgImgStyle" />
       <!-- 灰色遮罩部分 -->
       <el-collapse-transition>
-        <div v-show="showCover" class="home-cover" @mousewheel="onMouseWheel">
-          <div class="type-area">
+        <div v-show="showCover" class="home-cover" @wheel="onMouseWheel">
+          <div class="type-area" :style="typerAreaStyle">
           </div>
           <el-button class="scroll-btn" type="text" v-show="showBtn" @click="onMouseWheel">
             <i class="iconfont icon-arrow-down" />
@@ -15,7 +15,7 @@
         </div>
       </el-collapse-transition>
     </div>
-    <div class="container" @mousewheel="onContainerMouseWheel">
+    <div class="container" @wheel="onContainerMouseWheel">
       <nav-bar></nav-bar>
       <el-scrollbar
         id="scroll-box"
@@ -52,6 +52,10 @@ export default {
       },
       // 鼠标向上滚动计数器
       wheelTop: 0,
+      // 调试好的页面基础高度
+      baseHeight: 1297,
+      // 浏览器高度
+      clientHeight: 1297,
       typeHTML: `
       <p>Hello, I'm</p>
       <p class="bold large-font">Doco</p>
@@ -65,11 +69,20 @@ export default {
       return true;
       // return false;
     },
+    typerAreaStyle() {
+      return {
+        transform: `scale(${this.clientHeight / this.baseHeight})`,
+      };
+    },
   },
   created() {
     this.showCover = this.$route.path === '/';
   },
   mounted() {
+    this.clientHeight = window.innerHeight;
+    window.onresize = () => {
+      this.clientHeight = window.innerHeight;
+    };
     const el = document.querySelector('.type-area');
     Typer(el, { html: this.typeHTML }, () => {
       this.showBtn = true;
@@ -77,6 +90,7 @@ export default {
   },
   methods: {
     onMouseWheel(e) {
+      e.preventDefault();
       if (!this.showBtn) return;
       // 鼠标滚轮向下滚动
       if (!e.wheelDelta || e.wheelDelta < 0) {
@@ -112,7 +126,7 @@ export default {
     .home-background {
       z-index: -1;
       position: fixed;
-      min-width: 800px;
+      min-width: 1366px;
       width: 100vw;
       height: 100%;
       background-size: cover;
@@ -128,9 +142,10 @@ export default {
       padding-bottom: 20px;
       background-color: rgba(0, 0, 0, .5);
       .type-area {
+        margin-bottom: 25px;
         font-size: 40px;
         font-weight: bold;
-        color: #fff;
+        color: #7f7f7f;
         text-align: center;
         line-height: 1;
         .large-font {
