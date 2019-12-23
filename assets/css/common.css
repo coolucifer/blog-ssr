@@ -12,6 +12,7 @@ html {
   box-sizing: border-box;
   color: #2c3e50;
 }
+
 /* hide scroll-bar in Chrome */
 body::-webkit-scrollbar {
   display: none;
@@ -19,6 +20,22 @@ body::-webkit-scrollbar {
 /* hide scroll-bar in IE/EDGE */
 body {
   -ms-overflow-style: none;
+}
+/* hide scroll-bar in FireFox */
+html,
+.el-scrollbar {
+  overflow: -moz-hidden-unscrollable !important; /*注意！若只打 hidden，chrome 的其它 hidden 会出问题*/
+  height: 100%;
+}
+body,
+.el-scrollbar__wrap {
+  height: 100%;
+  width: calc(100vw + 18px); /*浏览器滚动条的长度大约是 18px*/
+  overflow: auto;
+}
+#__nuxt {
+  min-width: 1366px;
+  width: 100vw;
 }
 
 *,
