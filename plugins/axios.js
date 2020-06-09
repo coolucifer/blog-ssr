@@ -1,4 +1,4 @@
-export default function ({ $axios, redirect }) {
+export default function axios({ $axios, redirect }) {
   $axios.onRequest(config => {
     console.log(`[${new Date()}] Making request to ${config.url}`);
   });
