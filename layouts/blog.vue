@@ -3,15 +3,16 @@
     <!-- 不是首页时不显示头图 -->
     <div v-if="showHeaderImg" class="header-img">
       <!-- 背景图片 -->
-      <div class="home-background" :style="bgImgStyle" />
+      <!-- <div class="home-background" :style="bgImgStyle" /> -->
       <!-- 灰色遮罩部分 -->
       <el-collapse-transition>
         <div v-show="showCover" class="home-cover" @wheel="onMouseWheel">
+          <canvas class="home-background" id="fluid-canvas"></canvas>
           <div class="type-area" :style="typerAreaStyle">
           </div>
-          <el-button class="scroll-btn" type="text" v-show="showBtn" @click="onMouseWheel">
+          <!-- <el-button class="scroll-btn" type="text" v-show="showBtn" @click="onMouseWheel">
             <i class="iconfont icon-arrow-down" />
-          </el-button>
+          </el-button> -->
         </div>
       </el-collapse-transition>
     </div>
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import WebGLFluid from '@/utils/webgl-fluid-simulation.js';
 import NavBar from '@/components/NavBar.vue';
 import SideList from '@/components/SideList.vue';
 import Typer from '@/utils/typer.js';
@@ -83,6 +85,8 @@ export default {
     window.onresize = () => {
       this.clientHeight = window.innerHeight;
     };
+    const fluidEl = document.querySelector('#fluid-canvas');
+    WebGLFluid(fluidEl);
     const el = document.querySelector('.type-area');
     Typer(el, { html: this.typeHTML }, () => {
       this.showBtn = true;
@@ -123,15 +127,12 @@ export default {
 <style lang='scss'>
 .blog-layout {
   .header-img {
+    user-select: none;
     .home-background {
       z-index: -1;
-      position: fixed;
-      min-width: 1366px;
+      position: absolute;
       width: 100vw;
       height: 100%;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: 50%;
     }
     .home-cover {
       position: relative;
@@ -139,7 +140,6 @@ export default {
       justify-content: center;
       align-items: center;
       height: 100vh;
-      padding-bottom: 20px;
       background-color: rgba(0, 0, 0, .5);
       .type-area {
         margin-bottom: 25px;
