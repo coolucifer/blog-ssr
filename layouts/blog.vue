@@ -1,20 +1,15 @@
+<!-- 文字及背景样式 参照https://tomotoes.com/ 与 https://zhengrh.com/ -->
 <template>
   <div class="blog-layout">
-    <!-- 不是首页时不显示头图 -->
-    <div v-if="showHeaderImg" class="header-img">
-      <!-- 背景图片 -->
-      <!-- <div class="home-background" :style="bgImgStyle" /> -->
-      <!-- 灰色遮罩部分 -->
-      <el-collapse-transition>
-        <div v-show="showCover" class="home-cover" @wheel="onMouseWheel">
-          <canvas class="home-background" id="fluid-canvas"></canvas>
-          <div class="type-area" :style="typerAreaStyle">
-          </div>
-          <!-- <el-button class="scroll-btn" type="text" v-show="showBtn" @click="onMouseWheel">
-            <i class="iconfont icon-arrow-down" />
-          </el-button> -->
+    <div class="home-cover" @wheel="onMouseWheel">
+      <div class="home-cover-container">
+        <canvas class="home-background" id="fluid-canvas"></canvas>
+        <div class="type-area" :style="typerAreaStyle">
         </div>
-      </el-collapse-transition>
+      </div>
+      <!-- <el-button class="scroll-btn" type="text" v-show="showBtn" @click="onMouseWheel">
+        <i class="iconfont icon-arrow-down" />
+      </el-button> -->
     </div>
     <div class="container" @wheel="onContainerMouseWheel">
       <nav-bar></nav-bar>
@@ -46,12 +41,7 @@ export default {
   },
   data() {
     return {
-      showCover: false,
       showBtn: false,
-      bgImgStyle: {
-        // 'background-image': 'url(63740442_p0.png)',
-        'background-image': 'url(77991355_p0.jpg)',
-      },
       // 鼠标向上滚动计数器
       wheelTop: 0,
       // 调试好的页面基础高度
@@ -59,27 +49,18 @@ export default {
       // 浏览器高度
       clientHeight: 1297,
       typeHTML: `
-      <p>Hello, I'm</p>
-      <p class="bold large-font">Doco</p>
-      <p>and I'm a</p>
-      <p class="bold large-font">Developer</p>`,
+      <p class="large-font">Doco</p>
+      <p>Do Cool</p>`,
     };
   },
   computed: {
-    showHeaderImg() {
-      // return this.$route.path === '/';
-      return true;
-      // return false;
-    },
     typerAreaStyle() {
       return {
-        transform: `scale(${this.clientHeight / this.baseHeight})`,
+        // transform: `scale(${this.clientHeight / this.baseHeight})`,
       };
     },
   },
-  created() {
-    this.showCover = this.$route.path === '/';
-  },
+  created() {},
   mounted() {
     this.clientHeight = window.innerHeight;
     window.onresize = () => {
@@ -98,8 +79,20 @@ export default {
       if (!this.showBtn) return;
       // 鼠标滚轮向下滚动
       if (!e.wheelDelta || e.wheelDelta < 0) {
-        this.showCover = false;
+        const el = document.querySelector('.home-cover');
+        this.coverScrollToTop(el);
       }
+    },
+    coverScrollToTop(el) {
+      let start = 0;
+      const step = () => {
+        el.style.transform = `translateY(-${start}vh)`;
+        start += 100 / 30;
+        if (start <= 100) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
     },
     onContainerMouseWheel(e) {
       if (e) return;
@@ -114,7 +107,6 @@ export default {
         this.wheelTop = 0;
       }
       if (this.wheelTop > 4) {
-        this.showCover = true;
         this.$nextTick(() => {
           this.wheelTop = 0;
         });
@@ -126,50 +118,116 @@ export default {
 
 <style lang='scss'>
 .blog-layout {
-  .header-img {
+  .home-cover {
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     user-select: none;
+    .home-cover-container {
+      z-index: 10;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(30, 31, 33, 1);
+    }
     .home-background {
       z-index: -1;
       position: absolute;
       width: 100vw;
       height: 100%;
     }
-    .home-cover {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, .5);
-      .type-area {
-        margin-bottom: 25px;
-        font-size: 40px;
-        font-weight: bold;
-        color: #7f7f7f;
-        text-align: center;
-        line-height: 1;
-        .large-font {
-          font-size: 50px;
-        }
-        .bold {
-          font-weight: 1000;
-        }
+    .type-area {
+      margin-bottom: 25px;
+      font: 200 6vw/1 "Comic Sans MS","Helvetica Neue","Microsoft Yahei","Microsoft Yahei",-apple-system,sans-serif;
+      text-shadow: #452d2d 0 0 1px, #fffffb 0 0 1px, #fffffb 0 0 2px;
+      color: #fff;
+      text-align: center;
+      line-height: 1;
+      animation: whiteShadow 1.5s ease-in-out infinite alternate;
+      .large-font {
+        font-size: 10vw;
       }
-      .scroll-btn {
-        position: absolute;
-        bottom: 10px;
-        left: calc(50% - 26px);
+    }
+    @keyframes whiteShadow {
+      0% {
+        text-shadow: 0 0 1px #fff,0 0 2px #fff,0 0 3px #fff,0 0 5px #333,0 0 8px #333,0 0 9px #333,0 0 10px #333,0 0 15px #333
       }
-      .el-button--text {
-        padding: 0;
-        color: #e4e4e4;
-        &:hover {
-          color: #ffffff;
-        }
+
+      to {
+        text-shadow: 0 0 .5px #fff,0 0 1px #fff,0 0 1.5px #fff,0 0 2px #333,0 0 4px #333,0 0 5px #333,0 0 6px #333,0 0 8px #333
       }
-      .iconfont {
-        font-size: 50px;
+    }
+    span {
+      animation: letter-glow .7s 0s ease both;
+      &:first-child {
+        animation-delay: 50ms
       }
+
+      &:nth-child(2) {
+        animation-delay: .1s
+      }
+
+      &:nth-child(3) {
+        animation-delay: .15s
+      }
+
+      &:nth-child(4) {
+        animation-delay: .2s
+      }
+
+      &:nth-child(5) {
+        animation-delay: .25s
+      }
+
+      &:nth-child(6) {
+        animation-delay: .3s
+      }
+
+      &:nth-child(7) {
+        animation-delay: .35s
+      }
+    }
+    // 文字从左向右发光
+    @keyframes letter-glow {
+      0% {
+        opacity: 0;
+        text-shadow: 0 0 1px hsla(0,0%,100%,.1)
+      }
+
+      66% {
+        opacity: 1;
+        text-shadow: 0 0 20px hsla(0,0%,100%,.9)
+      }
+
+      77% {
+        opacity: 1
+      }
+
+      to {
+        opacity: .7;
+        text-shadow: 0 0 20px hsla(0,0%,100%,.2)
+      }
+    }
+    .scroll-btn {
+      position: absolute;
+      bottom: 10px;
+      left: calc(50% - 26px);
+    }
+    .el-button--text {
+      padding: 0;
+      color: #e4e4e4;
+      &:hover {
+        color: #ffffff;
+      }
+    }
+    .iconfont {
+      font-size: 50px;
     }
   }
   .container {
