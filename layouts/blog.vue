@@ -1,7 +1,7 @@
 <!-- 文字及背景样式 参照https://tomotoes.com/ 与 https://zhengrh.com/ -->
 <template>
   <div class="blog-layout">
-    <div class="home-cover" @wheel="onMouseWheel">
+    <div class="home-cover" :class="{ 'scroll-top': !showCover }" @wheel="onMouseWheel">
       <div class="home-cover-container">
         <canvas class="home-background" id="fluid-canvas"></canvas>
         <div class="type-area" :style="typerAreaStyle">
@@ -41,6 +41,7 @@ export default {
   },
   data() {
     return {
+      showCover: true,
       showBtn: false,
       // 鼠标向上滚动计数器
       wheelTop: 0,
@@ -79,8 +80,9 @@ export default {
       if (!this.showBtn) return;
       // 鼠标滚轮向下滚动
       if (!e.wheelDelta || e.wheelDelta < 0) {
-        const el = document.querySelector('.home-cover');
-        this.coverScrollToTop(el);
+        // const el = document.querySelector('.home-cover');
+        // this.coverScrollToTop(el);
+        this.showCover = false;
       }
     },
     coverScrollToTop(el) {
@@ -126,6 +128,10 @@ export default {
     width: 100vw;
     height: 100vh;
     user-select: none;
+    transition: all ease-in-out .5s;
+    &.scroll-top {
+      transform: translateY(-100vh);
+    }
     .home-cover-container {
       z-index: 10;
       width: 100vw;
