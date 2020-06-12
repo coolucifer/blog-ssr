@@ -17,7 +17,6 @@
 import marked from '@/utils/marked.js';
 
 export default {
-  layout: 'blog',
   name: 'ArticleContent',
   components: {
   },

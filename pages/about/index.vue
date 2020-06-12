@@ -6,7 +6,6 @@
 
 <script>
 export default {
-  layout: 'blog',
   name: 'AboutMe',
   components: {},
   data() {

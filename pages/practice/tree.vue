@@ -23,7 +23,6 @@
 import Tree from '@/utils/tree';
 
 export default {
-  layout: 'blog',
   components: {},
   data() {
     return {

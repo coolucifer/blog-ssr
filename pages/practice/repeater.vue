@@ -65,7 +65,6 @@ import ChatBubble from '@/components/practice/ChatBubble.vue';
 import defaultAvatar from '@/assets/images/default_avatar.jpg';
 
 export default {
-  layout: 'blog',
   components: {
     ChatBubble,
   },

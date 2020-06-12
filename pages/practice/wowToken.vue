@@ -10,7 +10,7 @@
 import echarts from 'echarts';
 
 export default {
-  layout: 'blog',
+
   components: {
   },
   async asyncData({ $axios }) {

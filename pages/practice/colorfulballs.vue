@@ -8,7 +8,6 @@
 
 <script>
 export default {
-  layout: 'blog',
   components: {
   },
   data() {
