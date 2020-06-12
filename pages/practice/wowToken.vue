@@ -79,7 +79,7 @@ export default {
             return Math.floor(value.min - 50);
           },
           max(value) {
-            return Math.ceil(value.min + 50);
+            return Math.ceil(value.max + 50);
           },
         },
         series: [{
