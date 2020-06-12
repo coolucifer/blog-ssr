@@ -4,7 +4,10 @@
     <div class="home-cover" :class="{ 'scroll-top': !showCover }" @wheel="onMouseWheel" @transitionend="coverTransitionEnd">
       <div class="home-cover-container">
         <canvas class="home-background" id="fluid-canvas"></canvas>
-        <div class="type-area" :style="typerAreaStyle">
+        <div class="type-area" :style="typerAreaStyle"></div>
+        <div class="arrow-wrapper fade" :class="{ 'in': showBtn }" @click="onMouseWheel">
+          <div class="arrow arrow-1"></div>
+          <div class="arrow arrow-2"></div>
         </div>
       </div>
       <svg
@@ -140,6 +143,15 @@ export default {
 
 <style lang='scss'>
 .blog-layout {
+  .fade {
+    opacity: 0;
+    transition: all 1s;
+    transform: translateY(200px);
+    &.in {
+      opacity: 1;
+      transform: none;
+    }
+  }
   .home-cover {
     z-index: 100;
     position: absolute;
@@ -242,20 +254,57 @@ export default {
         text-shadow: 0 0 20px hsla(0,0%,100%,.2)
       }
     }
-    .scroll-btn {
+    .arrow-wrapper {
+      cursor: pointer;
       position: absolute;
-      bottom: 10px;
-      left: calc(50% - 26px);
+      height: 3vh;
+      width: 20px;
+      top: 92vh;
     }
-    .el-button--text {
-      padding: 0;
-      color: #e4e4e4;
-      &:hover {
-        color: #ffffff;
+    .arrow {
+      position: absolute;
+      left: 3px;
+      top: 3vh;
+      transform-origin: 50% 50%;
+      transform: translate3d(-50%, 0, 0);
+      &:after,
+      &:before {
+        background: #fff;
+        content: '';
+        display: block;
+        height: 3px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 13px;
+        box-shadow: 1px 1px 20px 0 #fff;
+      }
+      &:before {
+        transform: rotate(45deg) translateX(-10%);
+        transform-origin: top left;
+      }
+      &:after {
+        transform: rotate(-45deg) translateX(10%);
+        transform-origin: top right;
+      }
+      &.arrow-1 {
+        animation: arrow-movement 2s ease-in-out infinite;
+      }
+      &.arrow-2 {
+        animation: arrow-movement 2s 1s ease-in-out infinite;
       }
     }
-    .iconfont {
-      font-size: 50px;
+    @keyframes arrow-movement {
+      0% {
+        opacity: 0;
+        top: 0;
+      }
+      70% {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
     }
     svg.shape path {
       // animation: svgAnimation 1s ease-out 1 forwards;
