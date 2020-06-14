@@ -20,6 +20,7 @@ import NavBar from '@/components/NavBar.vue';
 import SideList from '@/components/SideList.vue';
 
 export default {
+  name: 'DefaultLayout',
   components: {
     NavBar,
     SideList,
