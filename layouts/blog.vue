@@ -79,6 +79,10 @@ export default {
       this.showBtn = true;
     });
   },
+  beforeDestroy() {
+    this.updateIsFirst(false);
+    console.log('isFirst: ', this.isFirst);
+  },
   methods: {
     ...mapMutations(['updateIsFirst']),
     onMouseWheel(e) {
@@ -93,7 +97,7 @@ export default {
     },
     coverTransitionEnd() {
       this.$nextTick(() => {
-        this.updateIsFirst(false);
+        // this.updateIsFirst(false);
       });
     },
     onContainerMouseWheel(e) {
