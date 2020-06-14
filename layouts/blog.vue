@@ -1,7 +1,7 @@
 <!-- 文字及背景样式 参照https://tomotoes.com/ 与 https://zhengrh.com/ -->
 <template>
   <div class="blog-layout">
-    <div class="home-cover" :class="{ 'scroll-top': !showCover }" @wheel="onMouseWheel" @transitionend="coverTransitionEnd">
+    <div class="home-cover" v-if="isFirst" :class="{ 'scroll-top': !showCover }" @wheel="onMouseWheel" @transitionend.self="coverTransitionEnd">
       <div class="home-cover-container">
         <canvas class="home-background" id="fluid-canvas"></canvas>
         <div class="type-area" :style="typerAreaStyle"></div>
@@ -29,33 +29,19 @@
       </el-button> -->
     </div>
     <div class="container" @wheel="onContainerMouseWheel">
-      <nav-bar></nav-bar>
-      <el-scrollbar
-        id="scroll-box"
-        ref="scrollbar"
-        class="scroll-bar"
-        wrap-style="overflow-x: hidden;"
-      >
-        <div class="grid-layout">
-          <nuxt />
-          <side-list></side-list>
-        </div>
-      </el-scrollbar>
+      <nuxt />
     </div>
   </div>
 </template>
 
 <script>
 import WebGLFluid from '@/utils/webgl-fluid-simulation.js';
-import NavBar from '@/components/NavBar.vue';
-import SideList from '@/components/SideList.vue';
 import Typer from '@/utils/typer.js';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
-  components: {
-    NavBar,
-    SideList,
-  },
+  name: 'BlogLayout',
+  components: {},
   data() {
     return {
       showCover: true,
@@ -72,6 +58,8 @@ export default {
     };
   },
   computed: {
+    // 只有第一次进入页面时显示webGl动画
+    ...mapGetters(['isFirst']),
     typerAreaStyle() {
       return {
         // transform: `scale(${this.clientHeight / this.baseHeight})`,
@@ -85,39 +73,28 @@ export default {
       this.clientHeight = window.innerHeight;
     };
     const fluidEl = document.querySelector('#fluid-canvas');
-    WebGLFluid(fluidEl);
+    if (fluidEl) WebGLFluid(fluidEl);
     const el = document.querySelector('.type-area');
     Typer(el, { html: this.typeHTML }, () => {
       this.showBtn = true;
     });
   },
   methods: {
+    ...mapMutations(['updateIsFirst']),
     onMouseWheel(e) {
       e.preventDefault();
       if (!this.showBtn) return;
       // 鼠标滚轮向下滚动
       if (!e.wheelDelta || e.wheelDelta < 0) {
-        // const el = document.querySelector('.home-cover');
-        // this.coverScrollToTop(el);
         const el = document.querySelector('.shape path');
-        // el.setAttribute('animation-name', 'svgAnimation');
         el.style.animationName = 'svgAnimation';
         this.showCover = false;
       }
     },
-    coverScrollToTop(el) {
-      let start = 0;
-      const step = () => {
-        el.style.transform = `translateY(-${start}vh)`;
-        start += 100 / 30;
-        if (start <= 100) {
-          window.requestAnimationFrame(step);
-        }
-      };
-      window.requestAnimationFrame(step);
-    },
     coverTransitionEnd() {
-      console.log('element transition end');
+      this.$nextTick(() => {
+        this.updateIsFirst(false);
+      });
     },
     onContainerMouseWheel(e) {
       if (e) return;
@@ -184,14 +161,15 @@ export default {
     }
     .type-area {
       margin-bottom: 25px;
-      font: 200 6vw/1 "Comic Sans MS","Helvetica Neue","Microsoft Yahei","Microsoft Yahei",-apple-system,sans-serif;
+      // font: 200 6vw/1 "Comic Sans MS","Helvetica Neue","Microsoft Yahei","Microsoft Yahei",-apple-system,sans-serif;
       text-shadow: #452d2d 0 0 1px, #fffffb 0 0 1px, #fffffb 0 0 2px;
       color: #fff;
+      font-size: 6rem;
       text-align: center;
       line-height: 1;
       animation: whiteShadow 1.5s ease-in-out infinite alternate;
       .large-font {
-        font-size: 10vw;
+        font-size: 10rem;
       }
     }
     @keyframes whiteShadow {
