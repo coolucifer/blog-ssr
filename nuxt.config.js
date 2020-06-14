@@ -86,5 +86,20 @@ export default {
       // 100k以下的图片会被编译为base64
       imgUrl: { limit: 100000 },
     },
+    // 优化打包
+    analyze: true,
+    vendor: ['element-ui'],
+    maxChunkSize: 300000,
+    bable: {
+      plugins: [
+        [
+          'component',
+          {
+            libraryName: 'element-ui',
+            styleLibraryName: 'theme-chalk',
+          },
+        ],
+      ],
+    },
   },
 };
