@@ -86,7 +86,7 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: #ccc;
-  background-image: url('/images/67158818_p0.jpg');
+  background-image: url('/images/75028182_p0.jpg');
   // background-image: url('/images/78843311_p0.jpg');
   background-position: center center;
   background-repeat: no-repeat;
@@ -108,7 +108,7 @@ export default {
         position: relative;
         color: #fff;
         font-size: 2rem;
-        background-color: #ccc;
+        background-color: rgba($color: #ccc, $alpha: .8);
         transition: background-color .3s ease,top .5s ease,left .5s ease,width .5s ease,height .5s ease;
         overflow: hidden;
         &:hover {
