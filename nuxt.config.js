@@ -4,6 +4,7 @@ export default {
   buildDir: 'nuxt',
   env: {
     WS_URL: process.env.NODE_ENV === 'production' ? 'https://doco.dev' : 'localhost:7001',
+    // WS_URL: 'https://doco.dev',
   },
   server: {
     port: process.env.NODE_ENV === 'production' ? 7001 : 3000,
@@ -21,7 +22,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon_icon.png' },
-      { rel: 'stylesheet', href: '//at.alicdn.com/t/font_784085_25wsqhd6xxm.css' },
+      { rel: 'stylesheet', href: '//at.alicdn.com/t/font_784085_scgm6o391nr.css' },
     ],
   },
   /*
