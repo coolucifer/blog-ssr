@@ -63,10 +63,6 @@ export default {
   mounted() {},
   methods: {
     handleNavSelect(key) {
-      if (key === 'blog') {
-        this.$router.push('/');
-        return;
-      }
       this.$router.push(`/${key}`);
     },
   },
