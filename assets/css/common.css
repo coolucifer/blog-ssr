@@ -3,7 +3,7 @@ html {
     Roboto, 'Helvetica Neue', Arial, sans-serif; */
   line-height: 1.6;
   /* font-family: -apple-system-font,BlinkMacSystemFont,"Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei",Arial,sans-serif; */
-  font-family: Comic Sans MS,Helvetica Neue,Microsoft Yahei,-apple-system,sans-serif;
+  font-family: Comic Sans MS,Helvetica Neue,Microsoft Yahei,-apple-system,sans-serif!important;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -70,6 +70,20 @@ a:-webkit-any-link {
   transform: translateX(-20px);
 }
 .page-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+/* layout切换动画 */
+.layout-leave-active,
+.layout-enter-active {
+  transition: all 0.5s;
+}
+.layout-enter {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.layout-leave-to {
   opacity: 0;
   transform: translateX(20px);
 }
