@@ -1,14 +1,14 @@
 <!-- side list -->
 <template>
   <div class="side-list">
-    <el-collapse-transition>
-      <!-- 确保动画有效 -->
-      <!-- <div v-show="showSearchBar">
+    <!-- <el-collapse-transition> -->
+    <!-- 确保动画有效 -->
+    <!-- <div v-show="showSearchBar">
         <el-input v-model="searchValue" size="small" @keyup.enter.native="search">
           <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </div> -->
-    </el-collapse-transition>
+    <!-- </el-collapse-transition> -->
     <el-card class="side-card">
       <div class="side-card-header">
         <div class="avatar"></div>
