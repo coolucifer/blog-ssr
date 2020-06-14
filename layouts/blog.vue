@@ -81,7 +81,6 @@ export default {
   },
   beforeDestroy() {
     this.updateIsFirst(false);
-    console.log('isFirst: ', this.isFirst);
   },
   methods: {
     ...mapMutations(['updateIsFirst']),
