@@ -2,7 +2,7 @@
 import Vue from 'vue';
 // import ElementUI from 'element-ui';
 import {
-  Card, Menu, MenuItem, Input, ButtonGroup, Button, Scrollbar, Dialog, Form, RadioGroup, Radio,
+  Card, Menu, MenuItem, Input, ButtonGroup, Button, Scrollbar, Dialog, Form, FormItem, RadioGroup, Radio,
 } from 'element-ui';
 
 // Vue.use(ElementUI);
@@ -15,5 +15,6 @@ Vue.use(Button);
 Vue.use(Scrollbar);
 Vue.use(Dialog);
 Vue.use(Form);
+Vue.use(FormItem);
 Vue.use(RadioGroup);
 Vue.use(Radio);
