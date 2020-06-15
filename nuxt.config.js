@@ -45,6 +45,7 @@ export default {
       ssr: true,
     },
     { src: '@/plugins/ga.js', ssr: false },
+    '@/plugins/init',
     '@/plugins/axios',
     // '@/plugins/socket.io',
   ],
