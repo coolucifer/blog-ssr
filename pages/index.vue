@@ -33,6 +33,7 @@
 
 export default {
   layout: 'blog',
+  transition: 'fade',
   components: {
   },
   data() {

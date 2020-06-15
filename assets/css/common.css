@@ -74,18 +74,21 @@ a:-webkit-any-link {
   transform: translateX(20px);
 }
 
-/* layout切换动画 */
-.layout-leave-active,
-.layout-enter-active {
+/* fade淡入淡出切换动画 */
+.fade-leave-active,
+.fade-enter-active {
   transition: all 0.5s;
 }
-.layout-enter {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
-  transform: translateX(-20px);
 }
-.layout-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
+
+.layout-enter-active, .layout-leave-active {
+  transition: opacity .5s
+}
+.layout-enter, .layout-leave-active {
+  opacity: 0
 }
 
 .nuxt-progress {
