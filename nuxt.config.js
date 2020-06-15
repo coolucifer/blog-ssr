@@ -89,7 +89,6 @@ export default {
     },
     // 优化打包
     analyze: true,
-    vendor: ['element-ui'],
     maxChunkSize: 300000,
     bable: {
       plugins: [
