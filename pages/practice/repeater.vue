@@ -10,7 +10,7 @@
               <el-form-item prop="userNameInput">
                 <el-input v-model="userName"></el-input>
               </el-form-item>
-              <el-button type="primary" size="mini" @click="submitForm('userNameForm', setUserName)">
+              <el-button type="primary" size="mini" :loading="btnLoading" @click="submitForm('userNameForm', setUserName)">
                 确认
               </el-button>
             </el-form>
@@ -73,6 +73,7 @@ export default {
     return {
       defaultAvatar,
       showMask: true,
+      btnLoading: false,
       userName: '',
       message: '',
       msgList: [],
@@ -139,13 +140,21 @@ export default {
         return callback();
       });
     },
-    setUserName() {
-      const { userName } = this;
-      if (!userName) return;
-      this.showMask = false;
-      this.updateSocketUserName(userName);
-      this.initSocket(userName);
-      console.log('set UserName');
+    async setUserName() {
+      this.btnLoading = true;
+      try {
+        const { userName } = this;
+        if (!userName) return;
+        await this.initSocket(userName);
+        this.updateSocketUserName(userName);
+        this.showMask = false;
+      } catch (e) {
+        this.$message({
+          message: e,
+          type: 'error',
+        });
+      }
+      this.btnLoading = false;
     },
     async initSocket(userName) {
       await socket.connect(userName);
