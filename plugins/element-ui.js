@@ -2,7 +2,7 @@
 import Vue from 'vue';
 // import ElementUI from 'element-ui';
 import {
-  Card, Menu, MenuItem, Input, ButtonGroup, Button, Scrollbar, Dialog, Form, FormItem, RadioGroup, Radio,
+  Card, Menu, MenuItem, Input, ButtonGroup, Button, Scrollbar, Dialog, Form, FormItem, RadioGroup, Radio, Message,
 } from 'element-ui';
 
 // Vue.use(ElementUI);
@@ -18,3 +18,5 @@ Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(RadioGroup);
 Vue.use(Radio);
+
+Vue.prototype.$message = Message;
