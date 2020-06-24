@@ -1,8 +1,12 @@
 import 'highlight.js/styles/atom-one-dark.css';
 // import 'highlight.js/styles/googlecode.css';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+
+hljs.registerLanguage('javascript', javascript);
 
 const marked = require('marked');
-const hljs = require('highlight.js');
+// const hljs = require('highlight.js');
 
 const mdRenderer = new marked.Renderer();
 // 标题序号
@@ -39,10 +43,10 @@ marked.setOptions({
   // (code, lang, callback)
   highlight: (code) => {
     const lang = 'javascript';
-    if (lang && hljs.getLanguage(lang)) {
-      return hljs.highlight(lang, code, true).value;
-    }
-    return hljs.highlightAuto(code).value;
+    // if (lang && hljs.getLanguage(lang)) {
+    return hljs.highlight(lang, code, true).value;
+    // }
+    // return hljs.highlightAuto(code).value;
   },
 });
 
