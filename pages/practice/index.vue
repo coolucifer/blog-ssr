@@ -23,10 +23,10 @@ export default {
       list: [
         {
           author: 'admin',
-          createTime: '2019-04-02',
+          createTime: '2020-04-02',
           id: 'wowToken',
           title: '魔兽世界怀旧服: 时光徽章价格曲线',
-          updateTime: '2019-04-02',
+          updateTime: '2020-04-02',
         },
         {
           author: 'admin',
